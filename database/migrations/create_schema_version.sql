@@ -1,0 +1,13 @@
+CREATE TABLE schema_version (
+
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    version VARCHAR(20) NOT NULL UNIQUE,
+
+    nombre VARCHAR(100) NOT NULL,
+
+    archivo VARCHAR(150) NOT NULL,
+
+    fecha_ejecucion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+);
