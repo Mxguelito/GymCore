@@ -7,6 +7,8 @@ import view.components.DialogButtons;
 
 import controller.ClienteController;
 import model.Cliente;
+import model.Persona;
+import java.time.LocalDate;
 
 public class ClienteDialog extends JDialog {
 	
@@ -19,6 +21,10 @@ public class ClienteDialog extends JDialog {
 	private DialogButtons botones;
 	
 	private ClienteController clienteController;
+	
+	private Cliente cliente;
+
+	private boolean modoEdicion = false;
 	
 	
 
@@ -33,6 +39,35 @@ public class ClienteDialog extends JDialog {
 	    configurarEventos();
 	    
 	    
+
+	}
+	public ClienteDialog(Cliente cliente) {
+
+	    this();
+
+	    this.cliente = cliente;
+
+	    this.modoEdicion = true;
+
+	    cargarDatos();
+
+	}
+	
+	private void cargarDatos() {
+
+	    setTitle("Editar Cliente");
+
+	    txtNombre.setText(
+	            cliente.getPersona().getNombre()
+	    );
+
+	    txtApellido.setText(
+	            cliente.getPersona().getApellido()
+	    );
+
+	    txtEmail.setText(
+	            cliente.getPersona().getEmail()
+	    );
 
 	}
 	
@@ -156,23 +191,47 @@ public class ClienteDialog extends JDialog {
 	
 	private void guardarCliente() {
 
-	    if (!validarFormulario()) {
+	    try {
 
-	        return;
+	        if (!validarFormulario()) {
+	            return;
+	        }
+
+	        if (!modoEdicion) {
+
+	            cliente = new Cliente();
+
+	            Persona persona = new Persona();
+
+	            cliente.setPersona(persona);
+
+	            cliente.setFechaIngreso(LocalDate.now());
+
+	            cliente.setEstado("ACTIVO");
+
+	        }
+
+	        cliente.getPersona().setNombre(txtNombre.getText());
+	        cliente.getPersona().setApellido(txtApellido.getText());
+	        cliente.getPersona().setEmail(txtEmail.getText());
+
+	        if (modoEdicion) {
+
+	            clienteController.actualizar(cliente);
+
+	        } else {
+
+	            clienteController.guardar(cliente);
+
+	        }
+
+	        dispose();
+
+	    } catch (Exception e) {
+
+	        e.printStackTrace();
 
 	    }
-
-	    Cliente cliente = new Cliente();
-
-	    cliente.setNombre(txtNombre.getText());
-
-	    cliente.setApellido(txtApellido.getText());
-
-	    cliente.setEmail(txtEmail.getText());
-
-	    clienteController.guardar(cliente);
-
-	    limpiarFormulario();
 
 	}
 	

@@ -1,10 +1,12 @@
--- Seed: S1__default_roles.sql
--- Description: Inserta los roles iniciales del sistema.
--- Author: Victor Montejo
+-- =====================================================================
+-- Seed.........: S1
+-- Nombre.......: default_roles
+-- Descripcion..: Inserta los roles iniciales del sistema
+-- Autor........: Victor Montejo
+-- =====================================================================
 
 INSERT INTO rol (nombre, descripcion)
 VALUES
 ('ADMIN', 'Administrador del sistema'),
-('PROFESOR', 'Gestiona entrenamientos y rutinas'),
-('RECEPCIONISTA', 'Gestiona el ingreso de socios y turnos'),
-('SOCIO', 'Usuario del gimnasio');
+('ENTRENADOR', 'Gestiona clientes y rutinas'),
+('RECEPCIONISTA', 'Gestiona clientes, pagos y asistencias');

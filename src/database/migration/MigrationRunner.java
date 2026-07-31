@@ -27,16 +27,36 @@ public class MigrationRunner {
         
         inicializarSchemaVersion();
         
-        buscarArchivos();
         
-        verificarMigraciones();
-        mostrarMigraciones();
         
+        ejecutarGrupo(
+                "database/migrations",
+                "V",
+                "MIGRACIONES"
+        );
 
-
-        ejecutarMigracionesPendientes();
+        ejecutarGrupo(
+                "database/seeds",
+                "S",
+                "SEEDS"
+        );
 
         System.out.println();
+
+    }
+    
+    private void ejecutarGrupo(String carpeta, String prefijo, String titulo) {
+
+        System.out.println();
+        System.out.println("========== " + titulo + " ==========");
+
+        buscarArchivos(carpeta, prefijo);
+
+        verificarMigraciones();
+
+        mostrarMigraciones();
+
+        ejecutarPendientes(carpeta);
 
     }
 
@@ -66,17 +86,17 @@ public class MigrationRunner {
 
     }
     
-    private void buscarArchivos() {
-    	
-    	migrations.clear();
+    private void buscarArchivos(String carpetaPath, String prefijo) {
 
-        File carpeta = new File("database/migrations");
+        migrations.clear();
+
+        File carpeta = new File(carpetaPath);
 
         File[] archivos = carpeta.listFiles();
 
         if (archivos == null) {
 
-            System.out.println("No se encontraron migraciones.");
+            System.out.println("No se encontraron scripts.");
 
             return;
 
@@ -84,11 +104,11 @@ public class MigrationRunner {
 
         System.out.println();
 
-        System.out.println("Migraciones encontradas:");
+        System.out.println("Scripts encontrados en: " + carpetaPath);
 
         for (File archivo : archivos) {
 
-            if (!archivo.getName().startsWith("V")) {
+            if (!archivo.getName().startsWith(prefijo)) {
                 continue;
             }
 
@@ -97,6 +117,7 @@ public class MigrationRunner {
             migrations.add(migration);
 
         }
+
         migrations.sort(
                 Comparator.comparing(Migration::getVersion)
         );
@@ -149,7 +170,7 @@ public class MigrationRunner {
 
     }
 
-    private void ejecutarMigracionesPendientes() {
+    private void ejecutarPendientes(String carpetaPath) {
 
         boolean hayPendientes = false;
 
@@ -158,7 +179,6 @@ public class MigrationRunner {
             if (!migration.isEjecutada()) {
 
                 hayPendientes = true;
-
                 break;
 
             }
@@ -168,18 +188,38 @@ public class MigrationRunner {
         if (!hayPendientes) {
 
             System.out.println();
-
-            System.out.println("✔ No hay migraciones pendientes.");
+            System.out.println("✔ No hay scripts pendientes en " + carpetaPath);
 
             return;
 
         }
 
-        System.out.println("• Ejecutando pendientes...");
+        System.out.println();
+        System.out.println("Ejecutando scripts de: " + carpetaPath);
 
-    
+        for (Migration migration : migrations) {
 
-        
+            if (!migration.isEjecutada()) {
+
+                System.out.println();
+                System.out.println("Ejecutando: " + migration.getArchivo());
+
+                boolean ejecutada =
+                        scriptExecutor.ejecutar(
+                                carpetaPath + "/"
+                                + migration.getArchivo());
+
+                if (ejecutada) {
+
+                    schemaVersionDAO.registrar(migration);
+
+                    migration.setEjecutada(true);
+
+                }
+
+            }
+
+        }
 
     }
     

@@ -4,7 +4,7 @@ public class SearchPanel extends BasePanel {
 	
 	private PrimaryTextField txtBuscar;
 
-	private PrimaryButton btnNuevo;
+	
 
     public SearchPanel() {
 
@@ -18,7 +18,7 @@ public class SearchPanel extends BasePanel {
 
         crearCampoBusqueda();
         
-        crearBotonNuevo();
+       
 
     }
 
@@ -42,15 +42,7 @@ public class SearchPanel extends BasePanel {
 
     }
     
-    private void crearBotonNuevo() {
-
-    	btnNuevo = new PrimaryButton("Nuevo");
-    	
-        btnNuevo.setBounds(340, 50, 120, 35);
-
-        add(btnNuevo);
-
-    }
+    
     
     public PrimaryTextField getTxtBuscar() {
 
@@ -58,10 +50,5 @@ public class SearchPanel extends BasePanel {
 
     }
 
-    public PrimaryButton getBtnNuevo() {
-
-        return btnNuevo;
-
-    }
-
+    
 }

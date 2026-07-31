@@ -22,6 +22,10 @@ import view.listener.NavigationListener;
 
 import core.constants.LayoutConstants;
 
+import view.ObjetivosPanel;
+
+import view.NivelesPanel;
+
 public class DashboardFrame extends JFrame implements NavigationListener {
 
 	private JPanel panelPrincipal;
@@ -112,12 +116,20 @@ public class DashboardFrame extends JFrame implements NavigationListener {
 	    panelContenido.add(new DashboardPanel(), "DASHBOARD");
 
 	    panelContenido.add(new ClientesPanel(), "CLIENTES");
+	    
+	    panelContenido.add(new ObjetivosPanel(), "OBJETIVOS");
 
 	    panelContenido.add(new EntrenadoresPanel(), "ENTRENADORES");
 
 	    panelContenido.add(new RutinasPanel(), "RUTINAS");
 
 	    panelContenido.add(new PagosPanel(), "PAGOS");
+	    
+	    panelContenido.add(new NivelesPanel(), "NIVELES");
+	    
+	    panelContenido.add(new GruposMuscularesPanel(), "GRUPOS_MUSCULARES");
+	    
+	    
 
 	}
 

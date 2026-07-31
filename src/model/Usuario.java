@@ -12,7 +12,7 @@ public class Usuario {
 
     private String estado;
 
-    private int rolId;
+    private Rol rol;
 
     private LocalDateTime fechaCreacion;
 
@@ -50,12 +50,12 @@ public class Usuario {
 		this.estado = estado;
 	}
 
-	public int getRolId() {
-		return rolId;
+	public Rol getRol() {
+	    return rol;
 	}
 
-	public void setRolId(int rolId) {
-		this.rolId = rolId;
+	public void setRol(Rol rol) {
+	    this.rol = rol;
 	}
 
 	public LocalDateTime getFechaCreacion() {
@@ -78,12 +78,12 @@ public class Usuario {
 		
 	}
 
-	public Usuario(String username, String passwordHash, String estado, int rolId) {
+	public Usuario(String username, String passwordHash, String estado, Rol rol) {
 		super();
 		this.username = username;
 		this.passwordHash = passwordHash;
 		this.estado = estado;
-		this.rolId = rolId;
+		this.rol = rol;
 	}
     
     

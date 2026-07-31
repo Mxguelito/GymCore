@@ -56,12 +56,20 @@ public class SidebarPanel extends BasePanel {
         agregarBoton("Dashboard", "DASHBOARD");
 
         agregarBoton("Clientes", "CLIENTES");
+        
+        agregarBoton("Objetivos", "OBJETIVOS");
 
         agregarBoton("Entrenadores", "ENTRENADORES");
 
         agregarBoton("Rutinas", "RUTINAS");
 
         agregarBoton("Pagos", "PAGOS");
+        
+        agregarBoton("Niveles", "NIVELES");
+        
+        agregarBoton("Grupos Musculares", "GRUPOS_MUSCULARES");
+        
+        
 
     }
 

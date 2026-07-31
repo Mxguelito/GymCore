@@ -61,5 +61,11 @@ public class PrimaryTable extends JScrollPane {
         return table;
 
     }
+    
+    public int getSelectedRow() {
+
+        return table.getSelectedRow();
+
+    }
 
 }

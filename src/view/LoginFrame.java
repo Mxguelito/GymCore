@@ -169,7 +169,7 @@ public class LoginFrame extends JFrame {
             return;
         }
 
-        DashboardFrame dashboard = new DashboardFrame(usuario);
+        JFrame dashboard = DashboardFactory.crearDashboard(usuario);
 
         dashboard.setVisible(true);
 

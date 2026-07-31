@@ -1,80 +1,63 @@
 package model;
 
+import java.time.LocalDate;
+
 public class Cliente {
 
-    private int id;
-
-    private String nombre;
-
-    private String apellido;
-
-    private String email;
+    private int idCliente;
+    private Persona persona;
+    private LocalDate fechaIngreso;
+    private String estado;
 
     public Cliente() {
+    }
+
+    public Cliente(Persona persona,
+                   LocalDate fechaIngreso,
+                   String estado) {
+
+        this.persona = persona;
+        this.fechaIngreso = fechaIngreso;
+        this.estado = estado;
 
     }
 
-    public Cliente(int id, String nombre, String apellido, String email) {
-
-        this.id = id;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.email = email;
-
+    public int getIdCliente() {
+        return idCliente;
     }
 
-    public int getId() {
-
-        return id;
-
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
 
-    public void setId(int id) {
-
-        this.id = id;
-
+    public Persona getPersona() {
+        return persona;
     }
 
-    public String getNombre() {
-
-        return nombre;
-
+    public void setPersona(Persona persona) {
+        this.persona = persona;
     }
 
-    public void setNombre(String nombre) {
-
-        this.nombre = nombre;
-
+    public LocalDate getFechaIngreso() {
+        return fechaIngreso;
     }
 
-    public String getApellido() {
-
-        return apellido;
-
+    public void setFechaIngreso(LocalDate fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
     }
 
-    public void setApellido(String apellido) {
-
-        this.apellido = apellido;
-
+    public String getEstado() {
+        return estado;
     }
 
-    public String getEmail() {
-
-        return email;
-
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
-
-    public void setEmail(String email) {
-
-        this.email = email;
-
-    }
-
+    
     @Override
     public String toString() {
 
-        return nombre + " " + apellido;
+        return persona.getNombreCompleto();
 
     }
 
