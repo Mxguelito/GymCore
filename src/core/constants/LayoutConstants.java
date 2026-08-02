@@ -9,7 +9,7 @@ public final class LayoutConstants {
 
     public static final int MIN_WIDTH = 1200;
 
-    public static final int MIN_HEIGHT = 700;
+    public static final int MIN_HEIGHT = 850;
 
     // Header
 

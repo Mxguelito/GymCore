@@ -46,15 +46,8 @@ public class HeaderPanel extends BasePanel {
         setBackground(Colors.PRIMARY);
 
     }
-
+    
     private void crearTitulo() {
-
-        PrimaryLabel lblTitulo =
-                new PrimaryLabel(UIConstants.APP_TITLE);
-
-        lblTitulo.setFont(Fonts.TITLE);
-
-        add(lblTitulo, BorderLayout.WEST);
 
     }
 

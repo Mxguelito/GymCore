@@ -308,5 +308,43 @@ public class PersonaDAO extends BaseDAO<Persona> {
         );
 
     }
+    
+    public boolean existeEmail(String email) {
+
+        String sql = """
+                SELECT COUNT(*)
+                FROM persona
+                WHERE email = ?
+                """;
+
+        try (
+
+            Connection conexion = getConnection();
+            PreparedStatement ps = conexion.prepareStatement(sql)
+
+        ) {
+
+            ps.setString(1, email);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                return rs.getInt(1) > 0;
+
+            }
+
+        } catch (Exception e) {
+
+            throw new DatabaseException(
+                    "Error al verificar email.",
+                    e
+            );
+
+        }
+
+        return false;
+
+    }
 
 }

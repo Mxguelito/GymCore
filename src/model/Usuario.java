@@ -13,6 +13,8 @@ public class Usuario {
     private String estado;
 
     private Rol rol;
+    
+    private Persona persona;
 
     private LocalDateTime fechaCreacion;
 
@@ -57,6 +59,14 @@ public class Usuario {
 	public void setRol(Rol rol) {
 	    this.rol = rol;
 	}
+	
+	public Persona getPersona() {
+	    return persona;
+	}
+
+	public void setPersona(Persona persona) {
+	    this.persona = persona;
+	}
 
 	public LocalDateTime getFechaCreacion() {
 		return fechaCreacion;
@@ -78,13 +88,18 @@ public class Usuario {
 		
 	}
 
-	public Usuario(String username, String passwordHash, String estado, Rol rol) {
-		super();
-		this.username = username;
-		this.passwordHash = passwordHash;
-		this.estado = estado;
-		this.rol = rol;
-	}
+	public Usuario(Persona persona,
+            String username,
+            String passwordHash,
+            String estado,
+            Rol rol) {
+
+ this.persona = persona;
+ this.username = username;
+ this.passwordHash = passwordHash;
+ this.estado = estado;
+ this.rol = rol;
+}
     
     
 

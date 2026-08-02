@@ -1,113 +1,108 @@
 package view.dialogs;
 
+import javax.swing.JDialog;
+
 import controller.GrupoMuscularController;
-import view.components.DialogButtons;
-import view.components.FormField;
+
 import model.GrupoMuscular;
 
-import javax.swing.*;
-import java.awt.*;
+import view.components.DialogButtons;
+import view.components.FormField;
+import view.components.SectionTitle;
 
 public class GrupoMuscularDialog extends JDialog {
 
-    private final GrupoMuscularController controller;
+    private FormField txtNombre;
 
-    private GrupoMuscular grupoMuscular;
+    private FormField txtDescripcion;
 
-    private final FormField txtNombre;
-    private final FormField txtDescripcion;
+    private DialogButtons botones;
 
-    private boolean guardado = false;
+    private GrupoMuscularController controller;
 
-    public GrupoMuscularDialog(Window owner) {
+    private GrupoMuscular grupo;
 
-        super(owner, "Grupo Muscular", ModalityType.APPLICATION_MODAL);
+    private boolean modoEdicion = false;
+
+    public GrupoMuscularDialog() {
 
         controller = new GrupoMuscularController();
 
-        txtNombre = new FormField("Nombre", 380);
-        txtDescripcion = new FormField("Descripción", 380);
+        configurarVentana();
 
-        inicializar();
+        inicializarComponentes();
+
+        configurarEventos();
 
     }
 
-    private void inicializar() {
+    public GrupoMuscularDialog(GrupoMuscular grupo) {
 
-        setSize(450, 280);
+        this();
 
-        setLocationRelativeTo(getOwner());
+        this.grupo = grupo;
+
+        modoEdicion = true;
+
+        cargarDatos();
+
+    }
+
+    private void configurarVentana() {
+
+        setTitle("Grupo Muscular");
+
+        setSize(500, 380);
+
+        setLocationRelativeTo(null);
+
+        setModal(true);
 
         setResizable(false);
 
-        JPanel formulario = new JPanel();
-
-        formulario.setLayout(new GridLayout(2, 1, 0, 15));
-
-        formulario.add(txtNombre);
-
-        formulario.add(txtDescripcion);
-
-        DialogButtons botones = new DialogButtons();
-
-        botones.getBtnGuardar().addActionListener(e -> guardar());
-
-        botones.getBtnCancelar().addActionListener(e -> dispose());
-
-        setLayout(new BorderLayout(15, 15));
-
-        add(formulario, BorderLayout.CENTER);
-
-        add(botones, BorderLayout.SOUTH);
+        setLayout(null);
 
     }
 
-    private void guardar() {
+    private void inicializarComponentes() {
 
-        if (txtNombre.getText().trim().isEmpty()) {
+        SectionTitle titulo =
+                new SectionTitle("Grupo Muscular");
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Debe ingresar un nombre."
-            );
+        titulo.setBounds(30,20,250,40);
 
-            return;
+        add(titulo);
 
-        }
+        txtNombre =
+                crearCampo("Nombre",30,80,400);
 
-        if (grupoMuscular == null) {
+        txtDescripcion =
+                crearCampo("Descripción",30,170,400);
 
-            grupoMuscular = new GrupoMuscular();
+        botones = new DialogButtons();
 
-            grupoMuscular.setActivo(true);
+        botones.setLocation(30,290);
 
-        }
-
-        grupoMuscular.setNombre(txtNombre.getText().trim());
-
-        grupoMuscular.setDescripcion(
-                txtDescripcion.getText().trim()
-        );
-
-        if (grupoMuscular.getIdGrupoMuscular() == null) {
-
-            controller.guardar(grupoMuscular);
-
-        } else {
-
-            controller.actualizar(grupoMuscular);
-
-        }
-
-        guardado = true;
-
-        dispose();
+        add(botones);
 
     }
 
-    public void editar(GrupoMuscular grupo) {
+    private FormField crearCampo(String titulo,int x,int y,int ancho){
 
-        this.grupoMuscular = grupo;
+        FormField campo =
+                new FormField(titulo,ancho);
+
+        campo.setLocation(x,y);
+
+        add(campo);
+
+        return campo;
+
+    }
+
+    private void cargarDatos(){
+
+        setTitle("Editar Grupo Muscular");
 
         txtNombre.setText(grupo.getNombre());
 
@@ -115,15 +110,63 @@ public class GrupoMuscularDialog extends JDialog {
 
     }
 
-    public boolean fueGuardado() {
+    private void configurarEventos(){
 
-        return guardado;
+        botones.getBtnCancelar().addActionListener(e -> dispose());
+
+        botones.getBtnGuardar().addActionListener(e -> guardar());
 
     }
 
-    public GrupoMuscular getGrupoMuscular() {
+    private boolean validarFormulario(){
 
-        return grupoMuscular;
+        if(txtNombre.getText().isBlank()){
+
+            txtNombre.requestFocusField();
+
+            return false;
+
+        }
+
+        return true;
+
+    }
+
+    private void guardar(){
+
+        if(!validarFormulario()){
+
+            return;
+
+        }
+
+        if(!modoEdicion){
+
+            grupo = new GrupoMuscular();
+
+            grupo.setActivo(true);
+
+        }
+
+        grupo.setNombre(
+                txtNombre.getText()
+        );
+
+        grupo.setDescripcion(
+                txtDescripcion.getText()
+        );
+
+        if(modoEdicion){
+
+            controller.actualizar(grupo);
+
+        }else{
+
+            controller.guardar(grupo);
+
+        }
+
+        dispose();
 
     }
 

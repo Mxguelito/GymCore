@@ -1,0 +1,28 @@
+package core.security;
+
+import org.mindrot.jbcrypt.BCrypt;
+
+public final class PasswordUtils {
+
+    private PasswordUtils() {
+    }
+
+    public static String hash(String password) {
+
+        return BCrypt.hashpw(
+                password,
+                BCrypt.gensalt(12)
+        );
+
+    }
+
+    public static boolean verify(String password, String hash) {
+
+        return BCrypt.checkpw(
+                password,
+                hash
+        );
+
+    }
+
+}

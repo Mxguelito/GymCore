@@ -238,17 +238,30 @@ public class RutinasPanel extends BasePanel {
                 tablaRutinas.getTable()
                         .convertRowIndexToModel(filaVista);
 
+     
+        
         Rutina rutina =
-                modelo.getRutina(filaModelo);
+                controller.buscarPorId(
+                        modelo.getRutina(filaModelo)
+                                .getIdRutina()
+                );
 
-        RutinaDialog dialog =
-                new RutinaDialog();
+        RutinaDialog dialog = new RutinaDialog();
 
         dialog.editar(rutina);
 
         dialog.setVisible(true);
+        System.out.println(dialog.getRutina());
 
-        actualizarTabla();
+        Rutina rutinaActualizada = dialog.getRutina();
+
+        if (rutinaActualizada != null) {
+
+            controller.actualizar(rutinaActualizada);
+
+            actualizarTabla();
+
+        }
 
     }
 

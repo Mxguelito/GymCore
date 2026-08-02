@@ -18,6 +18,8 @@ import model.Persona;
 import model.Entrenador;
 import java.sql.Date;
 
+import model.Ejercicio;
+
 public class RutinaDAO extends BaseDAO<Rutina> {
 
     public void guardar(Rutina rutina) {
@@ -499,16 +501,311 @@ public class RutinaDAO extends BaseDAO<Rutina> {
 
     }
 
-    public void eliminar(Integer id) {
+   public void eliminar(Integer id) {
 
-    }
+	    String sql = """
 
+	        UPDATE rutina
+
+	        SET activo = FALSE
+
+	        WHERE id_rutina = ?
+
+	        """;
+
+	    try (
+
+	            Connection connection = getConnection();
+
+	            PreparedStatement ps =
+	                    connection.prepareStatement(sql)
+
+	    ) {
+
+	        ps.setInt(
+	                1,
+	                id
+	        );
+
+	        ps.executeUpdate();
+
+	    } catch (Exception e) {
+
+	        throw new DatabaseException(
+
+	                "Error al eliminar la rutina.",
+
+	                e
+
+	        );
+
+	    }
+
+	}
+
+    @Override
     public Rutina buscarPorId(Integer id) {
 
-        return null;
+        Rutina rutina = null;
+
+        String sql = """
+
+            SELECT
+
+                r.id_rutina,
+                r.nombre,
+                r.descripcion,
+                r.fecha_inicio,
+                r.fecha_fin,
+                r.estado,
+
+                c.id_cliente,
+
+                pc.id_persona cliente_persona_id,
+                pc.nombre cliente_nombre,
+                pc.apellido cliente_apellido,
+
+                e.id_entrenador,
+
+                pe.id_persona entrenador_persona_id,
+                pe.nombre entrenador_nombre,
+                pe.apellido entrenador_apellido
+
+            FROM rutina r
+
+            INNER JOIN cliente c
+                ON r.cliente_id = c.id_cliente
+
+            INNER JOIN persona pc
+                ON c.persona_id = pc.id_persona
+
+            INNER JOIN entrenador e
+                ON r.entrenador_id = e.id_entrenador
+
+            INNER JOIN persona pe
+                ON e.persona_id = pe.id_persona
+
+            WHERE r.id_rutina = ?
+
+            """;
+
+        try (
+
+                Connection connection = getConnection();
+
+                PreparedStatement ps =
+                        connection.prepareStatement(sql)
+
+        ) {
+
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                rutina = new Rutina();
+
+                rutina.setIdRutina(
+                        rs.getInt("id_rutina")
+                );
+
+                rutina.setNombre(
+                        rs.getString("nombre")
+                );
+
+                rutina.setDescripcion(
+                        rs.getString("descripcion")
+                );
+
+                rutina.setFechaInicio(
+                        rs.getDate("fecha_inicio").toLocalDate()
+                );
+
+                rutina.setFechaFin(
+                        rs.getDate("fecha_fin").toLocalDate()
+                );
+
+                rutina.setEstado(
+                        rs.getString("estado")
+                );
+
+                Cliente cliente = new Cliente();
+
+                cliente.setIdCliente(
+                        rs.getInt("id_cliente")
+                );
+
+                Persona personaCliente = new Persona();
+
+                personaCliente.setIdPersona(
+                        rs.getInt("cliente_persona_id")
+                );
+
+                personaCliente.setNombre(
+                        rs.getString("cliente_nombre")
+                );
+
+                personaCliente.setApellido(
+                        rs.getString("cliente_apellido")
+                );
+
+                cliente.setPersona(personaCliente);
+
+                rutina.setCliente(cliente);
+
+                Entrenador entrenador = new Entrenador();
+
+                entrenador.setIdEntrenador(
+                        rs.getInt("id_entrenador")
+                );
+
+                entrenador.setPersonaId(
+                        rs.getInt("entrenador_persona_id")
+                );
+
+                entrenador.setNombrePersona(
+                        rs.getString("entrenador_nombre")
+                );
+
+                entrenador.setApellidoPersona(
+                        rs.getString("entrenador_apellido")
+                );
+
+                rutina.setEntrenador(entrenador);
+
+            }
+
+        } catch (Exception e) {
+
+            throw new DatabaseException(
+                    "Error al buscar rutina.",
+                    e
+            );
+
+        }
+        
+        rutina.setDetalles(
+                cargarDetalles(
+                        rutina.getIdRutina()
+                )
+        );
+
+        return rutina;
 
     }
 
+   
+    private List<RutinaDetalle> cargarDetalles(
+            Integer idRutina
+    ) {
+
+        List<RutinaDetalle> detalles =
+                new ArrayList<>();
+
+        String sql = """
+
+            SELECT
+
+                rd.id_rutina_detalle,
+                rd.series,
+                rd.repeticiones,
+                rd.peso,
+                rd.descanso,
+                rd.orden,
+
+                e.id_ejercicio,
+                e.nombre
+
+            FROM rutina_detalle rd
+
+            INNER JOIN ejercicio e
+                ON rd.ejercicio_id = e.id_ejercicio
+
+            WHERE rd.rutina_id = ?
+
+            ORDER BY rd.orden
+
+            """;
+
+        try (
+
+        		Connection connection = getConnection();
+
+        		PreparedStatement ps =
+        		        connection.prepareStatement(sql);
+
+        ) {
+
+            ps.setInt(
+                    1,
+                    idRutina
+            );
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            while (rs.next()) {
+
+                RutinaDetalle detalle =
+                        new RutinaDetalle();
+
+                detalle.setIdRutinaDetalle(
+                        rs.getInt("id_rutina_detalle")
+                );
+
+                Ejercicio ejercicio =
+                        new Ejercicio();
+
+                ejercicio.setIdEjercicio(
+                        rs.getInt("id_ejercicio")
+                );
+
+                ejercicio.setNombre(
+                        rs.getString("nombre")
+                );
+
+                detalle.setEjercicio(
+                        ejercicio
+                );
+
+                detalle.setSeries(
+                        rs.getInt("series")
+                );
+
+                detalle.setRepeticiones(
+                        rs.getInt("repeticiones")
+                );
+
+                detalle.setPeso(
+                        rs.getDouble("peso")
+                );
+
+                detalle.setDescanso(
+                        rs.getInt("descanso")
+                );
+
+                detalle.setOrden(
+                        rs.getInt("orden")
+                );
+
+                detalles.add(detalle);
+
+            }
+
+        } catch (Exception e) {
+
+            throw new DatabaseException(
+                    "Error al cargar los ejercicios.",
+                    e
+            );
+
+        }
+
+        return detalles;
+
+    }
+    
     @Override
     public List<Rutina> listar() {
 
@@ -662,4 +959,25 @@ ORDER BY r.nombre
 
     }
 
+    
+    
+    public List<Rutina> listarPorCliente(Integer clienteId) {
+
+        List<Rutina> todas = listar();
+
+        List<Rutina> resultado = new ArrayList<>();
+
+        for (Rutina rutina : todas) {
+
+        	if (rutina.getCliente().getIdCliente() == clienteId) {
+
+        	    resultado.add(rutina);
+
+        	}
+
+        }
+
+        return resultado;
+
+    }
 }

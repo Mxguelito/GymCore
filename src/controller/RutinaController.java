@@ -44,5 +44,11 @@ public class RutinaController {
         return rutinaService.listar();
 
     }
+    
+    public List<Rutina> listarPorCliente(Integer clienteId) {
+
+        return rutinaService.listarPorCliente(clienteId);
+
+    }
 
 }

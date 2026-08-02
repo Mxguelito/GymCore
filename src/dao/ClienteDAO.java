@@ -239,4 +239,95 @@ public class ClienteDAO extends BaseDAO<Cliente> {
 
     }
 
+    
+    
+    public Cliente buscarPorPersona(Integer idPersona) {
+
+        String sql = """
+
+            SELECT
+
+                c.id_cliente,
+                c.fecha_ingreso,
+                c.estado,
+
+                p.id_persona,
+                p.nombre,
+                p.apellido,
+                p.email
+
+            FROM cliente c
+
+            INNER JOIN persona p
+                ON c.persona_id = p.id_persona
+
+            WHERE p.id_persona = ?
+
+            """;
+
+        try (
+
+            Connection connection = getConnection();
+
+            PreparedStatement ps =
+                    connection.prepareStatement(sql)
+
+        ) {
+
+            ps.setInt(1, idPersona);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+
+                Cliente cliente = new Cliente();
+
+                cliente.setIdCliente(
+                        rs.getInt("id_cliente")
+                );
+
+                cliente.setFechaIngreso(
+                        rs.getDate("fecha_ingreso").toLocalDate()
+                );
+
+                cliente.setEstado(
+                        rs.getString("estado")
+                );
+
+                Persona persona = new Persona();
+
+                persona.setIdPersona(
+                        rs.getInt("id_persona")
+                );
+
+                persona.setNombre(
+                        rs.getString("nombre")
+                );
+
+                persona.setApellido(
+                        rs.getString("apellido")
+                );
+
+                persona.setEmail(
+                        rs.getString("email")
+                );
+
+                cliente.setPersona(persona);
+
+                return cliente;
+
+            }
+
+        } catch (Exception e) {
+
+            throw new DatabaseException(
+                    "Error al buscar cliente.",
+                    e
+            );
+
+        }
+
+        return null;
+
+    }
 }

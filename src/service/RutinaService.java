@@ -50,5 +50,10 @@ public class RutinaService extends BaseService<Rutina> {
         return rutinaDAO.listar();
 
     }
+    public List<Rutina> listarPorCliente(Integer clienteId) {
+
+        return rutinaDAO.listarPorCliente(clienteId);
+
+    }
 
 }

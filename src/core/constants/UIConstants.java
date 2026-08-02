@@ -4,12 +4,13 @@ public final class UIConstants {
 
     private UIConstants() {}
 
-    public static final int BORDER_RADIUS = 12;
+    // Ventana
+    public static final int WINDOW_WIDTH = 1400;
+    public static final int WINDOW_HEIGHT = 850;
 
-    public static final int CARD_PADDING = 20;
-
-    public static final int COMPONENT_SPACING = 15;
-
-    public static final int WINDOW_PADDING = 30;
+    // Layout
+    public static final int HEADER_HEIGHT = 80;
+    public static final int SIDEBAR_WIDTH = 280;
+    public static final int FOOTER_HEIGHT = 30;
 
 }

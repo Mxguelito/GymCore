@@ -18,9 +18,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import view.components.PrimaryLabel;
+import view.components.LinkLabel;
 import view.components.PrimaryButton;
 import view.components.PrimaryPasswordField;
 import view.components.PrimaryTextField;
+
+import view.dialogs.RegistroDialog;
+
+import view.components.branding.SidebarLogo;
+
+import core.theme.Colors;
 
 public class LoginFrame extends JFrame {
 
@@ -38,6 +45,8 @@ public class LoginFrame extends JFrame {
     private PrimaryPasswordField txtPassword;
 
     private PrimaryButton btnIngresar;
+    
+    private PrimaryButton btnRegistrarse;
     
     private UsuarioService usuarioService;
 
@@ -67,8 +76,8 @@ public class LoginFrame extends JFrame {
 
         panel.setLayout(null);
 
-        // Fondo estilo Apple
-        panel.setBackground(new Color(241, 245, 249));
+        
+        panel.setBackground(Colors.BACKGROUND);
 
         add(panel);
 
@@ -82,34 +91,18 @@ public class LoginFrame extends JFrame {
 
         crearBoton();
 
+        crearBotonRegistro();
+
         crearFooter();
 
     }
     private void crearTitulo() {
 
-        //---------------- LOGO ----------------//
+    	SidebarLogo logo = new SidebarLogo(true);
 
-    	lblLogo = new PrimaryLabel("GYMCORE");
+        logo.setBounds(0, 30, 470, 170);
 
-        lblLogo.setFont(new Font("Segoe UI", Font.BOLD, 42));
-
-        lblLogo.setForeground(new Color(15, 23, 42));
-
-        lblLogo.setBounds(100, 55, 280, 55);
-
-        panel.add(lblLogo);
-
-        //---------------- SUBTITULO ----------------//
-
-        lblSubtitulo = new PrimaryLabel("Fitness Management System");
-
-        lblSubtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-
-        lblSubtitulo.setForeground(new Color(100, 116, 139));
-
-        lblSubtitulo.setBounds(70, 110, 320, 30);
-
-        panel.add(lblSubtitulo);
+        panel.add(logo);
 
     }
 
@@ -151,6 +144,37 @@ public class LoginFrame extends JFrame {
         btnIngresar.addActionListener(e -> realizarLogin());
 
     }
+    
+    private void crearBotonRegistro() {
+
+        PrimaryLabel lblPregunta =
+                new PrimaryLabel("¿No tienes una cuenta?");
+
+        lblPregunta.setBounds(135, 540, 220, 25);
+
+        panel.add(lblPregunta);
+
+        LinkLabel linkRegistro =
+                new LinkLabel("Registrarse");
+
+        linkRegistro.setBounds(175, 565, 120, 25);
+
+        linkRegistro.addMouseListener(new java.awt.event.MouseAdapter() {
+
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+
+                RegistroDialog dialog = new RegistroDialog();
+
+                dialog.setVisible(true);
+
+            }
+
+        });
+
+        panel.add(linkRegistro);
+
+    }
     private void realizarLogin() {
 
         String username = txtUsuario.getText();
@@ -179,14 +203,15 @@ public class LoginFrame extends JFrame {
 
     private void crearFooter() {
 
-        JLabel lblFooter =
-                new JLabel("♠♠♠ Disciplina Perseverancia ♠♠♠");
+        PrimaryLabel lblFooter = new PrimaryLabel("© 2026 GymCore");
 
-        lblFooter.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lblFooter.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 
-        lblFooter.setForeground(new Color(148, 163, 184));
+        lblFooter.setForeground(new Color(160, 160, 160));
 
-        lblFooter.setBounds(100, 640, 280, 30);
+        lblFooter.setHorizontalAlignment(JLabel.CENTER);
+
+        lblFooter.setBounds(0, 645, 470, 20);
 
         panel.add(lblFooter);
 

@@ -1,166 +1,290 @@
 package view;
 
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.TableRowSorter;
+
 import controller.GrupoMuscularController;
+
+import core.constants.LayoutConstants;
+
 import model.GrupoMuscular;
+
 import view.components.BasePanel;
 import view.components.CrudButtons;
 import view.components.PrimaryTable;
 import view.components.SearchPanel;
-import view.dialogs.GrupoMuscularDialog;
-import view.tablemodels.GrupoMuscularTableModel;
+import view.components.SectionTitle;
 
-import javax.swing.*;
-import java.awt.*;
+import view.dialogs.GrupoMuscularDialog;
+
+import view.tablemodels.GrupoMuscularTableModel;
 
 public class GruposMuscularesPanel extends BasePanel {
 
-    private final GrupoMuscularController controller;
+    private SearchPanel searchPanel;
 
-    private final GrupoMuscularTableModel tableModel;
+    private CrudButtons crudButtons;
 
-    private final PrimaryTable tabla;
+    private PrimaryTable tablaGrupos;
 
-    private final CrudButtons crudButtons;
+    private GrupoMuscularTableModel modelo;
 
-    private final SearchPanel searchPanel;
+    private GrupoMuscularController controller;
+
+    private TableRowSorter<GrupoMuscularTableModel> sorter;
 
     public GruposMuscularesPanel() {
 
         controller = new GrupoMuscularController();
 
-        tableModel = new GrupoMuscularTableModel();
+        inicializarComponentes();
 
-        tabla = new PrimaryTable();
+    }
 
-        tabla.getTable().setModel(tableModel);
+    private void inicializarComponentes() {
 
-        crudButtons = new CrudButtons();
+        add(new SectionTitle("Gestión de Grupos Musculares"));
+
+        crearSearchPanel();
+
+        crearCrudButtons();
+
+        crearTabla();
+
+        configurarBuscador();
+
+        configurarEventos();
+
+    }
+
+    private void crearSearchPanel() {
 
         searchPanel = new SearchPanel();
 
-        inicializar();
+        searchPanel.setBounds(
+                40,
+                100,
+                500,
+                100
+        );
 
-        cargarDatos();
-
-    }
-
-    private void inicializar() {
-
-        setLayout(new BorderLayout(15,15));
-
-        add(searchPanel, BorderLayout.NORTH);
-
-        add(tabla, BorderLayout.CENTER);
-
-        add(crudButtons, BorderLayout.SOUTH);
-
-        crudButtons.getBtnNuevo().addActionListener(e -> nuevo());
-
-        crudButtons.getBtnEditar().addActionListener(e -> editar());
-
-        crudButtons.getBtnEliminar().addActionListener(e -> eliminar());
+        add(searchPanel);
 
     }
 
-    private void cargarDatos() {
+    private void crearCrudButtons() {
 
-        tableModel.cargarGruposMusculares(
+        crudButtons = new CrudButtons();
+
+        crudButtons.setBounds(
+                40,
+                210,
+                430,
+                45
+        );
+
+        add(crudButtons);
+
+    }
+
+    private void crearTabla() {
+
+        tablaGrupos = new PrimaryTable();
+
+        modelo = new GrupoMuscularTableModel();
+
+        modelo.cargarGruposMusculares(
                 controller.listar()
+        );
+
+        tablaGrupos.getTable().setModel(modelo);
+
+        sorter = new TableRowSorter<>(modelo);
+
+        tablaGrupos.getTable().setRowSorter(sorter);
+
+        tablaGrupos.setBounds(
+
+                LayoutConstants.PADDING,
+
+                LayoutConstants.TABLE_Y + 60,
+
+                LayoutConstants.TABLE_WIDTH,
+
+                LayoutConstants.TABLE_HEIGHT
+
+        );
+
+        add(tablaGrupos);
+
+    }
+
+    private void actualizarTabla() {
+
+        modelo.cargarGruposMusculares(
+
+                controller.listar()
+
         );
 
     }
 
-    private void nuevo() {
+    private void configurarEventos() {
 
-        GrupoMuscularDialog dialog =
-                new GrupoMuscularDialog(
-                        SwingUtilities.getWindowAncestor(this)
-                );
+        crudButtons.getBtnNuevo().addActionListener(e -> {
 
-        dialog.setVisible(true);
+            GrupoMuscularDialog dialog =
+                    new GrupoMuscularDialog();
 
-        if(dialog.fueGuardado()){
+            dialog.setVisible(true);
 
-            cargarDatos();
+            actualizarTabla();
 
-        }
+        });
+
+        crudButtons.getBtnEditar().addActionListener(e -> {
+
+            editarGrupo();
+
+        });
+
+        crudButtons.getBtnEliminar().addActionListener(e -> {
+
+            eliminarGrupo();
+
+        });
 
     }
 
-    private void editar() {
+    private void editarGrupo() {
 
-        int fila = tabla.getSelectedRow();
+        int filaVista =
+                tablaGrupos.getTable().getSelectedRow();
 
-        if(fila == -1){
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Seleccione un grupo muscular."
-            );
+        if (filaVista == -1) {
 
             return;
 
         }
 
+        int filaModelo =
+                tablaGrupos.getTable()
+                           .convertRowIndexToModel(filaVista);
+
         GrupoMuscular grupo =
-                tableModel.getGrupoMuscular(fila);
+                modelo.getGrupoMuscular(filaModelo);
 
         GrupoMuscularDialog dialog =
-                new GrupoMuscularDialog(
-                        SwingUtilities.getWindowAncestor(this)
-                );
-
-        dialog.editar(grupo);
+                new GrupoMuscularDialog(grupo);
 
         dialog.setVisible(true);
 
-        if(dialog.fueGuardado()){
-
-            cargarDatos();
-
-        }
+        actualizarTabla();
 
     }
 
-    private void eliminar() {
+    private void eliminarGrupo() {
 
-        int fila = tabla.getSelectedRow();
+        int filaVista =
+                tablaGrupos.getTable().getSelectedRow();
 
-        if(fila == -1){
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Seleccione un grupo muscular."
-            );
+        if (filaVista == -1) {
 
             return;
 
         }
-
-        GrupoMuscular grupo =
-                tableModel.getGrupoMuscular(fila);
 
         int opcion = JOptionPane.showConfirmDialog(
 
                 this,
 
-                "¿Eliminar el grupo muscular?",
+                "¿Desea desactivar este grupo muscular?",
 
-                "Confirmación",
+                "Confirmar",
 
                 JOptionPane.YES_NO_OPTION
 
         );
 
-        if(opcion == JOptionPane.YES_OPTION){
+        if (opcion != JOptionPane.YES_OPTION) {
 
-            controller.eliminar(
-                    grupo.getIdGrupoMuscular()
-            );
-
-            cargarDatos();
+            return;
 
         }
+
+        int filaModelo =
+                tablaGrupos.getTable()
+                           .convertRowIndexToModel(filaVista);
+
+        GrupoMuscular grupo =
+                modelo.getGrupoMuscular(filaModelo);
+
+        controller.eliminar(
+
+                grupo.getIdGrupoMuscular()
+
+        );
+
+        actualizarTabla();
+
+    }
+
+    private void configurarBuscador() {
+
+        searchPanel.getTxtBuscar()
+                .getDocument()
+                .addDocumentListener(new DocumentListener() {
+
+                    @Override
+                    public void insertUpdate(DocumentEvent e) {
+
+                        filtrar();
+
+                    }
+
+                    @Override
+                    public void removeUpdate(DocumentEvent e) {
+
+                        filtrar();
+
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e) {
+
+                        filtrar();
+
+                    }
+
+                    private void filtrar() {
+
+                        String texto =
+                                searchPanel.getTxtBuscar().getText();
+
+                        if (texto.isBlank()) {
+
+                            sorter.setRowFilter(null);
+
+                        } else {
+
+                            sorter.setRowFilter(
+
+                                    RowFilter.regexFilter(
+
+                                            "(?i)" + texto
+
+                                    )
+
+                            );
+
+                        }
+
+                    }
+
+                });
 
     }
 

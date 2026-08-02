@@ -7,11 +7,40 @@ import core.theme.Colors;
 import core.theme.Fonts;
 import view.listener.NavigationListener;
 
+import model.Usuario;
+
+import java.util.ArrayList;
+import java.util.List;
+import view.components.branding.SidebarLogo;
+
+import javax.swing.JOptionPane;
+
+import javax.swing.SwingUtilities;
+
+import view.LoginFrame;
+import view.DashboardFrame;
+
+import java.awt.Color;
+
+import java.awt.BorderLayout;
+
+import javax.swing.JPanel;
+
 public class SidebarPanel extends BasePanel {
 
     private NavigationListener navigationListener;
+    
+    private Usuario usuario;
+    
+    private final List<MenuButton> botones = new ArrayList<>();
+    
+    private JPanel panelMenu;
 
-    public SidebarPanel() {
+    private JPanel panelLogout;
+
+    public SidebarPanel(Usuario usuario) {
+
+        this.usuario = usuario;
 
         inicializarComponentes();
 
@@ -27,14 +56,38 @@ public class SidebarPanel extends BasePanel {
 
         setBackground(Colors.PRIMARY);
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BorderLayout());
 
-        crearTitulo();
+        panelMenu = new BasePanel();
+
+        panelMenu.setOpaque(false);
+
+        panelMenu.setLayout(new BoxLayout(panelMenu, BoxLayout.Y_AXIS));
+
+        panelLogout = new BasePanel();
+
+        panelLogout.setOpaque(false);
+
+        panelLogout.setLayout(new BoxLayout(panelLogout, BoxLayout.Y_AXIS));
+
+       
+        
+        
+        panelMenu.add(new SidebarLogo());
+
+        panelMenu.add(Box.createVerticalStrut(5));
 
         crearMenu();
 
-    }
+        crearLogout();
 
+        add(panelMenu, BorderLayout.CENTER);
+
+        add(panelLogout, BorderLayout.SOUTH);
+        
+        
+
+    }
     private void crearTitulo() {
 
         PrimaryLabel lblTitulo = new PrimaryLabel("MENÚ");
@@ -53,31 +106,97 @@ public class SidebarPanel extends BasePanel {
 
     private void crearMenu() {
 
+        String rol = usuario.getRol().getNombre();
+
+        switch (rol) {
+
+            case "ADMIN":
+
+                crearMenuAdmin();
+
+                break;
+
+            case "CLIENTE":
+
+                crearMenuCliente();
+
+                break;
+
+            case "ENTRENADOR":
+
+                crearMenuEntrenador();
+
+                break;
+
+        }
+
+    }
+    
+    private void crearMenuAdmin() {
+
         agregarBoton("Dashboard", "DASHBOARD");
 
         agregarBoton("Clientes", "CLIENTES");
-        
-        agregarBoton("Objetivos", "OBJETIVOS");
 
         agregarBoton("Entrenadores", "ENTRENADORES");
 
         agregarBoton("Rutinas", "RUTINAS");
 
         agregarBoton("Pagos", "PAGOS");
+
+        agregarBoton("Configuración", "CONFIGURACION");
+
+    }
+    
+    private void crearMenuCliente() {
+
+        agregarBoton("Inicio", "CLIENTE_INICIO");
+
+        agregarBoton("Mi Perfil", "CLIENTE_PERFIL");
+
+        agregarBoton("Mis Rutinas", "CLIENTE_RUTINAS");
+
+        agregarBoton("Mi Progreso", "CLIENTE_PROGRESO");
+
+        agregarBoton("Mis Pagos", "CLIENTE_PAGOS");
         
-        agregarBoton("Niveles", "NIVELES");
-        
-        agregarBoton("Grupos Musculares", "GRUPOS_MUSCULARES");
-        
-        
+        if (!botones.isEmpty()) {
+
+            botones.get(0).setSeleccionado(true);
+
+        }
+
+    }
+    
+    private void crearMenuEntrenador() {
+
+        agregarBoton("Inicio", "ENTRENADOR_INICIO");
+
+        agregarBoton("Mis Clientes", "ENTRENADOR_CLIENTES");
+
+        agregarBoton("Rutinas", "ENTRENADOR_RUTINAS");
+
+        agregarBoton("Ejercicios", "ENTRENADOR_EJERCICIOS");
 
     }
 
     private void agregarBoton(String texto, String pantalla) {
 
         MenuButton boton = new MenuButton(texto);
+        
+        boton.setAlignmentX(CENTER_ALIGNMENT); 
+
+        botones.add(boton);
 
         boton.addActionListener(e -> {
+
+            for (MenuButton b : botones) {
+
+                b.setSeleccionado(false);
+
+            }
+
+            boton.setSeleccionado(true);
 
             if (navigationListener != null) {
 
@@ -87,9 +206,58 @@ public class SidebarPanel extends BasePanel {
 
         });
 
-        add(boton);
+        panelMenu.add(boton);
+        panelMenu.add(Box.createVerticalStrut(6));
 
-        add(Box.createVerticalStrut(10));
+    }
+    
+    private void crearLogout() {
+
+    	panelLogout.add(Box.createVerticalStrut(10));
+
+        LogoutButton botonSalir = new LogoutButton();
+
+        botonSalir.setAlignmentX(CENTER_ALIGNMENT);
+
+        botonSalir.addActionListener(e -> {
+
+        	int opcion = JOptionPane.showConfirmDialog(
+        	        SwingUtilities.getWindowAncestor(this),
+        	        "¿Deseás cerrar la sesión actual?\n\nTendrás que volver a iniciar sesión para acceder nuevamente.",
+        	        "Cerrar sesión",
+        	        JOptionPane.YES_NO_OPTION,
+        	        JOptionPane.QUESTION_MESSAGE
+        	);
+
+            if (opcion == JOptionPane.YES_OPTION) {
+
+                DashboardFrame dashboard = (DashboardFrame)
+                        SwingUtilities.getWindowAncestor(this);
+
+                dashboard.dispose();
+
+                new LoginFrame().setVisible(true);
+
+            }
+
+        });
+
+        panelLogout.add(botonSalir);
+        PrimaryLabel salir = new PrimaryLabel("Cerrar sesión");
+
+        salir.setAlignmentX(CENTER_ALIGNMENT);
+
+        salir.setForeground(new Color(240,240,240));
+
+        salir.setFont(Fonts.SMALL);
+
+        panelLogout.add(Box.createVerticalStrut(6));
+
+        panelLogout.add(salir);
+
+        panelLogout.add(Box.createVerticalStrut(20));
+
+        
 
     }
 

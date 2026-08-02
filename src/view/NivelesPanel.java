@@ -16,7 +16,7 @@ import view.components.SearchPanel;
 import view.components.SectionTitle;
 import view.dialogs.NivelDialog;
 import view.tablemodels.NivelTableModel;
-import view.dialogs.NivelDialog;
+
 public class NivelesPanel extends BasePanel {
 
     private SearchPanel searchPanel;

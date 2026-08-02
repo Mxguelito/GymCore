@@ -80,4 +80,10 @@ public class ClienteService {
 
     }
 
+    
+    public Cliente buscarPorPersona(Integer idPersona) {
+
+        return clienteDAO.buscarPorPersona(idPersona);
+
+    }
 }

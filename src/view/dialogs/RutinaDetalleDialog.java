@@ -275,17 +275,20 @@ public class RutinaDetalleDialog extends JDialog {
 
         this.detalle = detalle;
 
+        
+        cargarGrupos();
+
         cmbGrupo.getCombo().setSelectedItem(
                 detalle.getEjercicio().getGrupoMuscular()
         );
-
-        cargarGrupos();
 
         cargarEjercicios();
 
         cmbEjercicio.getCombo().setSelectedItem(
                 detalle.getEjercicio()
         );
+        
+        
 
         txtSeries.setValue(
                 detalle.getSeries()

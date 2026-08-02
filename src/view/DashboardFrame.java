@@ -5,7 +5,7 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import utils.UIConstants;
+import core.constants.UIConstants;
 import view.components.FooterPanel;
 import view.components.HeaderPanel;
 import view.components.SidebarPanel;
@@ -25,9 +25,12 @@ import core.constants.LayoutConstants;
 import view.ObjetivosPanel;
 
 import view.NivelesPanel;
+import core.theme.Colors;
+import javax.swing.JScrollPane;
+
+
 
 public class DashboardFrame extends JFrame implements NavigationListener {
-
 	private JPanel panelPrincipal;
 
 	private JPanel panelHeader;
@@ -41,10 +44,11 @@ public class DashboardFrame extends JFrame implements NavigationListener {
 	private CardLayout cardLayout;
 	
 	private Usuario usuario;
-
+	
+	
 	public DashboardFrame(Usuario usuario) {
 
-	    this.usuario = usuario;
+		this.usuario = usuario;
 
 	    configurarVentana();
 
@@ -59,7 +63,8 @@ public class DashboardFrame extends JFrame implements NavigationListener {
 	    setVisible(true);
 
 	}
-	private void crearHeader() {
+	
+	protected void crearHeader() {
 
 	    panelHeader = new HeaderPanel(usuario);
 
@@ -71,26 +76,35 @@ public class DashboardFrame extends JFrame implements NavigationListener {
 	
 
 	
+     
+	
+	protected void crearMenu() {
 
-	private void crearMenu() {
+		panelMenu = new SidebarPanel(usuario);
+		panelMenu.setNavigationListener(this);
 
-	    panelMenu = new SidebarPanel();
+		JScrollPane scrollSidebar = new JScrollPane(panelMenu);
 
-	    panelMenu.setBounds(
-	            0,
-	            UIConstants.HEADER_HEIGHT,
-	            UIConstants.MENU_WIDTH,
-	            UIConstants.WINDOW_HEIGHT
-	                    - UIConstants.HEADER_HEIGHT
-	                    - UIConstants.FOOTER_HEIGHT
-	    );
+		scrollSidebar.setBorder(null);
+		scrollSidebar.setHorizontalScrollBarPolicy(
+		        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollSidebar.setVerticalScrollBarPolicy(
+		        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-	    panelMenu.setNavigationListener(this);
+		scrollSidebar.setBounds(
+		        0,
+		        UIConstants.HEADER_HEIGHT,
+		        UIConstants.SIDEBAR_WIDTH,
+		        UIConstants.WINDOW_HEIGHT
+		                - UIConstants.HEADER_HEIGHT
+		                - UIConstants.FOOTER_HEIGHT
+		);
 
-	    panelPrincipal.add(panelMenu);
+		panelPrincipal.add(scrollSidebar);
 
 	}
-	private void crearContenido() {
+
+	protected void crearContenido() {
 
 	    cardLayout = new CardLayout();
 
@@ -99,9 +113,9 @@ public class DashboardFrame extends JFrame implements NavigationListener {
 	    registrarPantallas();
 
 	    panelContenido.setBounds(
-	            UIConstants.MENU_WIDTH,
+	            UIConstants.SIDEBAR_WIDTH,
 	            UIConstants.HEADER_HEIGHT,
-	            UIConstants.WINDOW_WIDTH - UIConstants.MENU_WIDTH,
+	            UIConstants.WINDOW_WIDTH - UIConstants.SIDEBAR_WIDTH,
 	            UIConstants.WINDOW_HEIGHT
 	                    - UIConstants.HEADER_HEIGHT
 	                    - UIConstants.FOOTER_HEIGHT
@@ -111,12 +125,32 @@ public class DashboardFrame extends JFrame implements NavigationListener {
 
 	}
 	
-	private void registrarPantallas() {
+	
+	protected void registrarPantallas() {
+
+	    String rol = usuario.getRol().getNombre();
+
+	    if (rol.equals("ADMIN")) {
+
+	        registrarPantallasAdmin();
+
+	    } else if (rol.equals("CLIENTE")) {
+
+	        registrarPantallasCliente();
+
+	    } else if (rol.equals("ENTRENADOR")) {
+
+	        registrarPantallasEntrenador();
+
+	    }
+
+	}
+	private void registrarPantallasAdmin() {
 
 	    panelContenido.add(new DashboardPanel(), "DASHBOARD");
 
 	    panelContenido.add(new ClientesPanel(), "CLIENTES");
-	    
+
 	    panelContenido.add(new ObjetivosPanel(), "OBJETIVOS");
 
 	    panelContenido.add(new EntrenadoresPanel(), "ENTRENADORES");
@@ -124,16 +158,55 @@ public class DashboardFrame extends JFrame implements NavigationListener {
 	    panelContenido.add(new RutinasPanel(), "RUTINAS");
 
 	    panelContenido.add(new PagosPanel(), "PAGOS");
-	    
+
 	    panelContenido.add(new NivelesPanel(), "NIVELES");
-	    
+
 	    panelContenido.add(new GruposMuscularesPanel(), "GRUPOS_MUSCULARES");
 	    
-	    
+	    panelContenido.add(
+	            new ConfiguracionPanel(),
+	            "CONFIGURACION"
+	    );
 
 	}
+	
+	private void registrarPantallasCliente() {
 
-	private void crearFooter() {
+	    panelContenido.add(
+	            new ClienteInicioPanel(usuario),
+	            "CLIENTE_INICIO"
+	    );
+
+	    panelContenido.add(
+	            new ClientePerfilPanel(usuario),
+	            "CLIENTE_PERFIL"
+	    );
+
+	    panelContenido.add(
+	    		new ClienteRutinasPanel(usuario),
+	            "CLIENTE_RUTINAS"
+	    );
+
+	    panelContenido.add(
+	            new ClienteProgresoPanel(usuario),
+	            "CLIENTE_PROGRESO"
+	    );
+
+	    panelContenido.add(
+	            new ClientePagosPanel(usuario),
+	            "CLIENTE_PAGOS"
+	    );
+
+	}
+	
+	private void registrarPantallasEntrenador() {
+
+	}
+	
+	
+
+	
+	protected void crearFooter() {
 
 	    panelFooter = new FooterPanel();
 
@@ -149,7 +222,8 @@ public class DashboardFrame extends JFrame implements NavigationListener {
 
 	}
 
-    private void configurarVentana() {
+	
+	protected void configurarVentana() {
 
         setTitle("GymCore");
 
@@ -173,7 +247,7 @@ public class DashboardFrame extends JFrame implements NavigationListener {
 
         panelPrincipal.setLayout(null);
 
-        panelPrincipal.setBackground(UIConstants.BACKGROUND);
+        panelPrincipal.setBackground(Colors.BACKGROUND);
 
         add(panelPrincipal);
 

@@ -32,5 +32,11 @@ public class ClienteController {
     public List<Cliente> listar() {
         return clienteService.listar();
     }
+    
+    public Cliente buscarPorPersona(Integer idPersona) {
+
+        return clienteService.buscarPorPersona(idPersona);
+
+    }
 
 }

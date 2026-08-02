@@ -172,14 +172,12 @@ public class EjerciciosPanel extends BasePanel {
 
         Ejercicio ejercicio = modelo.getEjercicio(filaModelo);
 
-        EjercicioDialog dialog = new EjercicioDialog();
-
-        dialog.editar(ejercicio);
+        EjercicioDialog dialog =
+                new EjercicioDialog(ejercicio);
 
         dialog.setVisible(true);
 
         actualizarTabla();
-
     }
 
     private void eliminarEjercicio() {

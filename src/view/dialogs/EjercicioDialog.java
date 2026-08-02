@@ -52,12 +52,19 @@ public class EjercicioDialog extends JDialog {
     
     public EjercicioDialog() {
 
-        this(null);
-        
-        editar(ejercicio);
+        this((Window) null);
 
     }
     
+    public EjercicioDialog(Ejercicio ejercicio) {
+
+        this();
+
+        this.ejercicio = ejercicio;
+
+        cargarDatos();
+
+    }
     
 
     private void inicializar() {
@@ -172,9 +179,15 @@ public class EjercicioDialog extends JDialog {
 
     }
 
-    public void editar(Ejercicio ejercicio) {
+    private void cargarDatos() {
 
-        this.ejercicio = ejercicio;
+        if (ejercicio == null) {
+
+            return;
+
+        }
+
+        setTitle("Editar Ejercicio");
 
         cmbGrupo.setSelectedItem(
                 ejercicio.getGrupoMuscular()
