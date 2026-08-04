@@ -60,7 +60,7 @@ public class RutinaDetalleDialog extends JDialog {
 
         setLayout(null);
 
-        setSize(470, 600);
+        setSize(560, 760);
 
         setLocationRelativeTo(null);
 
@@ -76,6 +76,7 @@ public class RutinaDetalleDialog extends JDialog {
 
         ejercicioController = new EjercicioController();
 
+        
         lblTitulo = new SectionTitle("Agregar Ejercicio");
 
         cmbGrupo = new ComboField<>("Grupo Muscular",360);
@@ -117,22 +118,23 @@ public class RutinaDetalleDialog extends JDialog {
 
         botones = new DialogButtons();
 
-        lblTitulo.setBounds(40,20,300,40);
+        lblTitulo.setBounds(45, 25, 350, 40);
 
-        cmbGrupo.setBounds(40,80,360,70);
+        cmbGrupo.setBounds(45, 90, 430, 70);
 
-        cmbEjercicio.setBounds(40,160,360,70);
+        cmbEjercicio.setBounds(45, 170, 430, 70);
 
-        txtSeries.setBounds(40,240,360,70);
+        txtSeries.setBounds(45, 250, 430, 70);
 
-        txtRepeticiones.setBounds(40,320,360,70);
+        txtRepeticiones.setBounds(45, 330, 430, 70);
 
-        txtPeso.setBounds(40,400,360,70);
+        txtPeso.setBounds(45, 410, 430, 70);
 
-        txtDescanso.setBounds(40,480,360,70);
+        txtDescanso.setBounds(45, 490, 430, 70);
 
-        botones.setBounds(70,540,320,45);
+        botones.setBounds(105, 620, 340, 45);
 
+       
         add(lblTitulo);
 
         add(cmbGrupo);

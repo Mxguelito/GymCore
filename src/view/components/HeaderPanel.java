@@ -28,7 +28,7 @@ public class HeaderPanel extends BasePanel {
 
         crearTitulo();
 
-        crearUsuario();
+       // crearUsuario();
 
     }
 

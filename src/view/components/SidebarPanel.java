@@ -51,6 +51,80 @@ public class SidebarPanel extends BasePanel {
         this.navigationListener = navigationListener;
 
     }
+    
+    public void seleccionarPantalla(String pantalla) {
+
+        for (MenuButton boton : botones) {
+            boton.setSeleccionado(false);
+        }
+
+        switch (pantalla) {
+
+            // ADMIN
+            case "DASHBOARD":
+                botones.get(0).setSeleccionado(true);
+                break;
+
+            case "CLIENTES":
+                botones.get(1).setSeleccionado(true);
+                break;
+
+            case "ENTRENADORES":
+                botones.get(2).setSeleccionado(true);
+                break;
+
+            case "RUTINAS":
+                botones.get(3).setSeleccionado(true);
+                break;
+
+            case "PAGOS":
+                botones.get(4).setSeleccionado(true);
+                break;
+
+            case "CONFIGURACION":
+                botones.get(5).setSeleccionado(true);
+                break;
+
+            // CLIENTE
+            case "CLIENTE_INICIO":
+                botones.get(0).setSeleccionado(true);
+                break;
+
+            case "CLIENTE_PERFIL":
+                botones.get(1).setSeleccionado(true);
+                break;
+
+            case "CLIENTE_RUTINAS":
+                botones.get(2).setSeleccionado(true);
+                break;
+
+            case "CLIENTE_PROGRESO":
+                botones.get(3).setSeleccionado(true);
+                break;
+
+            case "CLIENTE_PAGOS":
+                botones.get(4).setSeleccionado(true);
+                break;
+
+            // ENTRENADOR
+            case "ENTRENADOR_INICIO":
+                botones.get(0).setSeleccionado(true);
+                break;
+
+            case "ENTRENADOR_CLIENTES":
+                botones.get(1).setSeleccionado(true);
+                break;
+
+            case "ENTRENADOR_RUTINAS":
+                botones.get(2).setSeleccionado(true);
+                break;
+
+            case "ENTRENADOR_EJERCICIOS":
+                botones.get(3).setSeleccionado(true);
+                break;
+        }
+
+    }
 
     private void inicializarComponentes() {
 
@@ -75,7 +149,13 @@ public class SidebarPanel extends BasePanel {
         
         panelMenu.add(new SidebarLogo());
 
-        panelMenu.add(Box.createVerticalStrut(5));
+        panelMenu.add(Box.createVerticalStrut(20));
+
+        UserCard userCard = new UserCard(usuario);
+
+        panelMenu.add(userCard);
+
+        panelMenu.add(Box.createVerticalStrut(25));
 
         crearMenu();
 

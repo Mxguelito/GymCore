@@ -16,15 +16,16 @@ public class ObjetivoDAO extends BaseDAO<Objetivo> {
     @Override
     public void guardar(Objetivo objetivo) {
 
-        String sql = """
-                INSERT INTO objetivo
-                (
-                    nombre,
-                    descripcion
-                )
-                VALUES
-                (?, ?)
-                """;
+    	String sql = """
+    	        INSERT INTO objetivo
+    	        (
+    	            nombre,
+    	            descripcion,
+    	            activo
+    	        )
+    	        VALUES
+    	        (?, ?, ?)
+    	        """;
 
         try (
 
@@ -33,10 +34,11 @@ public class ObjetivoDAO extends BaseDAO<Objetivo> {
 
         ) {
 
-            ps.setString(1, objetivo.getNombre());
-            ps.setString(2, objetivo.getDescripcion());
+        	ps.setString(1, objetivo.getNombre());
+        	ps.setString(2, objetivo.getDescripcion());
+        	ps.setBoolean(3, objetivo.getActivo());
 
-            ps.executeUpdate();
+        	ps.executeUpdate();
 
         } catch (Exception e) {
 
@@ -54,10 +56,11 @@ public class ObjetivoDAO extends BaseDAO<Objetivo> {
 
         String sql = """
                 UPDATE objetivo
-                SET
-                    nombre = ?,
-                    descripcion = ?
-                WHERE id_objetivo = ?
+SET
+    nombre = ?,
+    descripcion = ?,
+    activo = ?
+WHERE id_objetivo = ?
                 """;
 
         try (
@@ -67,9 +70,10 @@ public class ObjetivoDAO extends BaseDAO<Objetivo> {
 
         ) {
 
-            ps.setString(1, objetivo.getNombre());
-            ps.setString(2, objetivo.getDescripcion());
-            ps.setInt(3, objetivo.getIdObjetivo());
+        	ps.setString(1, objetivo.getNombre());
+        	ps.setString(2, objetivo.getDescripcion());
+        	ps.setBoolean(3, objetivo.getActivo());
+        	ps.setInt(4, objetivo.getIdObjetivo());
 
             ps.executeUpdate();
 
@@ -164,11 +168,12 @@ public class ObjetivoDAO extends BaseDAO<Objetivo> {
     @Override
     public List<Objetivo> listar() {
 
-        String sql = """
-                SELECT *
-                FROM objetivo
-                ORDER BY nombre
-                """;
+    	String sql = """
+    	        SELECT *
+    	        FROM objetivo
+    	        WHERE activo = TRUE
+    	        ORDER BY nombre
+    	        """;
 
         List<Objetivo> objetivos = new ArrayList<>();
 

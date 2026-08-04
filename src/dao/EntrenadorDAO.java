@@ -152,6 +152,8 @@ public class EntrenadorDAO extends BaseDAO<Entrenador> {
 
                 INNER JOIN persona p
                     ON e.persona_id = p.id_persona
+                    
+                    WHERE e.estado = 'ACTIVO'
 
                 ORDER BY e.id_entrenador
                 """;

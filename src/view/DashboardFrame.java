@@ -253,12 +253,21 @@ public class DashboardFrame extends JFrame implements NavigationListener {
 
     }
     
-    @Override
-    public void navegar(String pantalla) {
+	@Override
+	public void navegar(String pantalla) {
 
-        System.out.println("Pantalla seleccionada: " + pantalla);
-        
-        cardLayout.show(panelContenido, pantalla);
+	    System.out.println("Pantalla seleccionada: " + pantalla);
+
+	    cardLayout.show(panelContenido, pantalla);
+
+	    panelMenu.seleccionarPantalla(pantalla);
+
+	}
+    public void volverAlDashboard() {
+
+        cardLayout.show(panelContenido, "DASHBOARD");
+
+        panelMenu.seleccionarPantalla("DASHBOARD");
 
     }
    

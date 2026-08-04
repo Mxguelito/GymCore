@@ -21,6 +21,8 @@ public class EntrenadorDialog extends JDialog {
     private PersonaController personaController;
 
     private Entrenador entrenador;
+    
+    private boolean modoEdicion = false;
 
     private SectionTitle lblTitulo;
 
@@ -35,6 +37,8 @@ public class EntrenadorDialog extends JDialog {
     private DialogButtons botones;
 
     public EntrenadorDialog() {
+    	
+    	
 
         configurarVentana();
 
@@ -47,6 +51,42 @@ public class EntrenadorDialog extends JDialog {
         registrarEventos();
 
     }
+    
+    public EntrenadorDialog(Entrenador entrenador) {
+
+        this();
+
+        this.entrenador = entrenador;
+
+        this.modoEdicion = true;
+
+        cargarDatos();
+
+    }
+    
+    private void cargarDatos() {
+
+        setTitle("Editar Entrenador");
+
+        lblTitulo.setText("Editar Entrenador");
+
+        txtEspecialidad.setText(
+                entrenador.getEspecialidad()
+        );
+
+        cmbEstado.getCombo().setSelectedItem(
+                entrenador.getEstado()
+        );
+
+        if (entrenador.getFechaIngreso() != null) {
+
+            txtFechaIngreso.setDate(
+                    entrenador.getFechaIngreso().toLocalDate()
+            );
+
+        }
+
+    }
 
     private void configurarVentana() {
 
@@ -54,7 +94,7 @@ public class EntrenadorDialog extends JDialog {
 
         setLayout(null);
 
-        setSize(470, 470);
+        setSize(540, 580);
 
         setLocationRelativeTo(null);
 
@@ -82,18 +122,20 @@ public class EntrenadorDialog extends JDialog {
 
         botones = new DialogButtons();
 
-        lblTitulo.setBounds(40, 20, 300, 40);
+       
+        lblTitulo.setBounds(45, 25, 350, 40);
 
-        cmbPersona.setBounds(40, 80, 360, 70);
+        cmbPersona.setBounds(45, 85, 430, 70);
 
-        txtEspecialidad.setBounds(40, 160, 360, 70);
+        txtEspecialidad.setBounds(45, 165, 430, 70);
 
-        txtFechaIngreso.setBounds(40, 240, 360, 70);
+        txtFechaIngreso.setBounds(45, 245, 430, 70);
 
-        cmbEstado.setBounds(40, 320, 360, 70);
+        cmbEstado.setBounds(45, 325, 430, 70);
 
-        botones.setBounds(70, 390, 320, 45);
-
+        botones.setBounds(95, 435, 340, 45);
+        
+        
         add(lblTitulo);
         add(cmbPersona);
         add(txtEspecialidad);
@@ -131,9 +173,66 @@ public class EntrenadorDialog extends JDialog {
 
     private void registrarEventos() {
 
-        // Próximo paso:
-        // botones.getBtnGuardar().addActionListener(...)
-        // botones.getBtnCancelar().addActionListener(...)
+        botones.getBtnCancelar().addActionListener(e -> dispose());
+
+        botones.getBtnGuardar().addActionListener(e -> guardarEntrenador());
+
+    }
+    
+    private void guardarEntrenador() {
+
+        try {
+
+        	if (!modoEdicion) {
+
+        	    entrenador = new Entrenador();
+
+        	}
+
+            Persona persona = (Persona) cmbPersona.getCombo().getSelectedItem();
+
+            entrenador.setPersonaId(persona.getIdPersona());
+
+            entrenador.setEspecialidad(
+                    txtEspecialidad.getText()
+            );
+
+            if (txtFechaIngreso.getDate() == null) {
+
+                entrenador.setFechaIngreso(
+                        new java.sql.Date(System.currentTimeMillis())
+                );
+
+            } else {
+
+                entrenador.setFechaIngreso(
+                        java.sql.Date.valueOf(
+                                txtFechaIngreso.getDate()
+                        )
+                );
+
+            }
+            entrenador.setEstado(
+                    (String) cmbEstado.getCombo().getSelectedItem()
+            );
+
+            if (modoEdicion) {
+
+                entrenadorController.actualizar(entrenador);
+
+            } else {
+
+                entrenadorController.guardar(entrenador);
+
+            }
+
+            dispose();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
 
     }
 

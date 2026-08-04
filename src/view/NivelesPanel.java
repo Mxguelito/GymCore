@@ -17,6 +17,11 @@ import view.components.SectionTitle;
 import view.dialogs.NivelDialog;
 import view.tablemodels.NivelTableModel;
 
+import view.components.PageHeader;
+
+import javax.swing.SwingUtilities;
+import view.DashboardFrame;
+
 public class NivelesPanel extends BasePanel {
 
     private SearchPanel searchPanel;
@@ -41,7 +46,26 @@ public class NivelesPanel extends BasePanel {
 
     private void inicializarComponentes() {
 
-        add(new SectionTitle("Gestión de Niveles"));
+    	PageHeader header = new PageHeader("Gestión de Niveles");
+
+    	header.setBounds(40, 30, 920, 40);
+    	
+    	header.setAccionVolver(() -> {
+
+    	    DashboardFrame dashboard =
+    	            (DashboardFrame) SwingUtilities.getWindowAncestor(this);
+
+    	    dashboard.navegar("CONFIGURACION");
+
+    	});
+    	
+    	header.getBtnVolver().addActionListener(e -> {
+
+    	
+
+    	});
+
+    	add(header);
 
         crearSearchPanel();
 

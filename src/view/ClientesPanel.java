@@ -180,12 +180,13 @@ public class ClientesPanel extends BasePanel {
     }
     
     private void eliminarCliente() {
+    	
+    	System.out.println();
+    	System.out.println("====================================");
+    	System.out.println("[VIEW] Solicitud de eliminar cliente");
+    	System.out.println("====================================");
 
-        int fila = tablaClientes.getSelectedRow();
-
-        if (fila == -1) {
-            return;
-        }
+        
 
         int opcion = JOptionPane.showConfirmDialog(
 
@@ -211,11 +212,15 @@ public class ClientesPanel extends BasePanel {
 
         int filaModelo = tablaClientes.getTable().convertRowIndexToModel(filaVista);
 
-        Cliente cliente = modelo.getCliente(filaModelo);
+       Cliente cliente = modelo.getCliente(filaModelo);
 
-        clienteController.eliminar(cliente.getIdCliente());
+       System.out.println("[VIEW] Cliente seleccionado: " + cliente.getIdCliente());
+       
+       clienteController.eliminar(cliente.getIdCliente());
 
-        actualizarTabla();
+       System.out.println("[VIEW] Actualizando tabla...");
+
+       actualizarTabla();
 
     }
     

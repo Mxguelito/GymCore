@@ -64,6 +64,8 @@ public class ClienteService {
 
     public void eliminar(Integer id) {
 
+        System.out.println("[SERVICE] eliminar(" + id + ")");
+
         clienteDAO.eliminar(id);
 
     }

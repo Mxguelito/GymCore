@@ -17,6 +17,8 @@ import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableRowSorter;
+import view.components.PageHeader;
+import javax.swing.SwingUtilities;
 
 public class ObjetivosPanel extends BasePanel {
 
@@ -42,7 +44,20 @@ public class ObjetivosPanel extends BasePanel {
 
     private void inicializarComponentes() {
 
-        add(new SectionTitle("Gestión de Objetivos"));
+    	PageHeader header = new PageHeader("Gestión de Objetivos");
+
+    	header.setBounds(40, 30, 1000, 50);
+
+    	header.getBtnVolver().addActionListener(e -> {
+
+    	    DashboardFrame dashboard =
+    	            (DashboardFrame) SwingUtilities.getWindowAncestor(this);
+
+    	    dashboard.navegar("CONFIGURACION");
+
+    	});
+
+    	add(header);
 
         crearSearchPanel();
 
@@ -96,7 +111,7 @@ public class ObjetivosPanel extends BasePanel {
 
                 LayoutConstants.PADDING,
 
-                LayoutConstants.TABLE_Y + 60,
+                LayoutConstants.TABLE_Y + 100,
 
                 LayoutConstants.TABLE_WIDTH,
 

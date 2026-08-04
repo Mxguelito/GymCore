@@ -22,7 +22,11 @@ public class ClienteController {
     }
 
     public void eliminar(Integer id) {
+
+        System.out.println("[CONTROLLER] eliminar(" + id + ")");
+
         clienteService.eliminar(id);
+
     }
 
     public Cliente buscarPorId(Integer id) {

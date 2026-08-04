@@ -6,6 +6,7 @@ import model.Cliente;
 import model.Usuario;
 
 import view.components.BasePanel;
+import view.components.InfoPanel;
 import view.components.PrimaryLabel;
 import view.components.SectionTitle;
 
@@ -40,56 +41,106 @@ public class ClientePagosPanel extends BasePanel {
                         "Consulta el estado de tu membresía y pagos."
                 );
 
-        descripcion.setBounds(40, 80, 450, 25);
+        descripcion.setBounds(40,80,500,25);
 
         add(descripcion);
 
-        crearResumen();
+        crearPanelMembresia();
+
+        crearPanelPagos();
 
     }
 
-    private void crearResumen() {
+    private void crearPanelMembresia() {
+
+        InfoPanel panel =
+                new InfoPanel("Membresía");
+
+        panel.setBounds(40,130,430,280);
+
+        add(panel);
 
         agregarDato(
+                panel,
                 "Estado",
                 cliente.getEstado() != null
                         ? cliente.getEstado()
-                        : "Sin asignar",
-                40,
-                140
+                        : "Sin registrar",
+                20,
+                70
         );
 
         agregarDato(
+                panel,
                 "Plan",
-                "Sin asignar",
-                40,
-                180
+                "Pendiente de implementar",
+                20,
+                110
         );
 
         agregarDato(
+                panel,
                 "Próximo vencimiento",
-                "Sin asignar",
-                40,
-                220
+                "Pendiente de implementar",
+                20,
+                150
         );
 
         agregarDato(
+                panel,
                 "Importe mensual",
-                "Sin asignar",
-                40,
-                260
+                "Pendiente de implementar",
+                20,
+                190
+        );
+
+    }
+
+    private void crearPanelPagos() {
+
+        InfoPanel panel =
+                new InfoPanel("Información de Pago");
+
+        panel.setBounds(500,130,430,280);
+
+        add(panel);
+
+        agregarDato(
+                panel,
+                "Método de pago",
+                "Pendiente de implementar",
+                20,
+                70
         );
 
         agregarDato(
-                "Método de pago",
-                "Sin asignar",
-                40,
-                300
+                panel,
+                "Último pago",
+                "Pendiente de implementar",
+                20,
+                110
+        );
+
+        agregarDato(
+                panel,
+                "Estado del pago",
+                "Pendiente de implementar",
+                20,
+                150
+        );
+
+        agregarDato(
+                panel,
+                "Observaciones",
+                "Pendiente de implementar",
+                20,
+                190
         );
 
     }
 
     private void agregarDato(
+            InfoPanel panel,
             String titulo,
             String valor,
             int x,
@@ -102,23 +153,23 @@ public class ClientePagosPanel extends BasePanel {
         lblTitulo.setBounds(
                 x,
                 y,
-                180,
+                170,
                 25
         );
 
-        add(lblTitulo);
+        panel.add(lblTitulo);
 
         PrimaryLabel lblValor =
                 new PrimaryLabel(valor);
 
         lblValor.setBounds(
-                x + 190,
+                x + 170,
                 y,
-                300,
+                220,
                 25
         );
 
-        add(lblValor);
+        panel.add(lblValor);
 
     }
 

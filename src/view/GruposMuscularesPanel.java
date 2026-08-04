@@ -22,6 +22,9 @@ import view.dialogs.GrupoMuscularDialog;
 
 import view.tablemodels.GrupoMuscularTableModel;
 
+import view.components.PageHeader;
+import javax.swing.SwingUtilities;
+
 public class GruposMuscularesPanel extends BasePanel {
 
     private SearchPanel searchPanel;
@@ -46,7 +49,20 @@ public class GruposMuscularesPanel extends BasePanel {
 
     private void inicializarComponentes() {
 
-        add(new SectionTitle("Gestión de Grupos Musculares"));
+    	PageHeader header = new PageHeader("Gestión de Grupos Musculares");
+
+    	header.setBounds(40, 30, 1000, 50);
+
+    	header.getBtnVolver().addActionListener(e -> {
+
+    	    DashboardFrame dashboard =
+    	            (DashboardFrame) SwingUtilities.getWindowAncestor(this);
+
+    	    dashboard.navegar("CONFIGURACION");
+
+    	});
+
+    	add(header);
 
         crearSearchPanel();
 
@@ -64,12 +80,7 @@ public class GruposMuscularesPanel extends BasePanel {
 
         searchPanel = new SearchPanel();
 
-        searchPanel.setBounds(
-                40,
-                100,
-                500,
-                100
-        );
+        searchPanel.setBounds(40, 140, 500, 100);
 
         add(searchPanel);
 
@@ -79,12 +90,7 @@ public class GruposMuscularesPanel extends BasePanel {
 
         crudButtons = new CrudButtons();
 
-        crudButtons.setBounds(
-                40,
-                210,
-                430,
-                45
-        );
+        crudButtons.setBounds(40, 250, 430, 45);
 
         add(crudButtons);
 
@@ -110,7 +116,7 @@ public class GruposMuscularesPanel extends BasePanel {
 
                 LayoutConstants.PADDING,
 
-                LayoutConstants.TABLE_Y + 60,
+                LayoutConstants.TABLE_Y + 100,
 
                 LayoutConstants.TABLE_WIDTH,
 

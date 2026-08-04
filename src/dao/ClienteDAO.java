@@ -142,8 +142,13 @@ public class ClienteDAO extends BaseDAO<Cliente> {
 
             ps.setString(1, "INACTIVO");
             ps.setInt(2, id);
+            
+            System.out.println("[DAO] Ejecutando UPDATE cliente...");
+            System.out.println("[DAO] ID = " + id);
 
             int filas = ps.executeUpdate();
+            
+            System.out.println("[DAO] Filas afectadas: " + filas);
 
             System.out.println();
             System.out.println("====================================");
@@ -185,6 +190,8 @@ public class ClienteDAO extends BaseDAO<Cliente> {
 
                 INNER JOIN persona p
                         ON c.persona_id = p.id_persona
+                        
+                        WHERE c.estado = 'ACTIVO'
 
                 ORDER BY p.apellido, p.nombre
                 """;

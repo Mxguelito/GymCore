@@ -1,17 +1,17 @@
 package view;
 
-import model.Usuario;
-import view.components.BasePanel;
-import view.components.PrimaryLabel;
-import view.components.SectionTitle;
 import controller.ClienteController;
 import model.Cliente;
+import model.Usuario;
+import view.components.BasePanel;
+import view.components.InfoCard;
+import view.components.PrimaryLabel;
+import view.components.SectionTitle;
 
 public class ClienteInicioPanel extends BasePanel {
 
     private Usuario usuario;
     private ClienteController clienteController;
-
     private Cliente cliente;
 
     public ClienteInicioPanel(Usuario usuario) {
@@ -36,94 +36,76 @@ public class ClienteInicioPanel extends BasePanel {
 
     private void inicializarComponentes() {
 
-        add(new SectionTitle("Inicio"));
+        SectionTitle titulo = new SectionTitle("Inicio");
+        titulo.setBounds(40, 30, 300, 40);
+        add(titulo);
 
         PrimaryLabel descripcion =
-                new PrimaryLabel("Bienvenido a GymCore. Aquí podrás consultar el resumen de tu actividad.");
+                new PrimaryLabel(
+                        "Bienvenido a GymCore. Aquí podrás consultar el resumen de tu actividad."
+                );
 
-        descripcion.setBounds(40, 80, 600, 25);
+        descripcion.setBounds(40, 80, 650, 25);
 
         add(descripcion);
 
-        crearResumen();
+        crearCards();
 
     }
 
-    private void crearResumen() {
+    private void crearCards() {
 
-        int y = 150;
+        InfoCard cardObjetivo =
+                new InfoCard(
+                        "Objetivo actual",
+                        "Sin asignar"
+                );
 
-        agregarDato(
-                "Objetivo actual",
-                "Sin asignar",
-                y
-        );
+        cardObjetivo.setBounds(40, 140, 260, 90);
 
-        y += 50;
+        add(cardObjetivo);
 
-        agregarDato(
-                "Próximo entrenamiento",
-                "Sin asignar",
-                y
-        );
+        InfoCard cardEntrenamiento =
+                new InfoCard(
+                        "Próximo entrenamiento",
+                        "Sin asignar"
+                );
 
-        y += 50;
+        cardEntrenamiento.setBounds(330, 140, 260, 90);
 
-        agregarDato(
-                "Estado de la membresía",
-                cliente.getEstado() != null
-                        ? cliente.getEstado()
-                        : "Sin asignar",
-                y
-        );
+        add(cardEntrenamiento);
 
-        y += 50;
+        InfoCard cardEstado =
+                new InfoCard(
+                        "Estado",
+                        cliente != null
+                                ? cliente.getEstado()
+                                : "-"
+                );
 
-        agregarDato(
-                "Último pago",
-                "Sin registrar",
-                y
-        );
+        cardEstado.setBounds(620, 140, 260, 90);
 
-        y += 50;
+        add(cardEstado);
 
-        agregarDato(
-                "Entrenador asignado",
-                "Sin asignar",
-                y
-        );
+        InfoCard cardPago =
+                new InfoCard(
+                        "Último pago",
+                        "Sin registrar"
+                );
 
-    }
+        cardPago.setBounds(40, 260, 260, 90);
 
-    private void agregarDato(
-            String titulo,
-            String valor,
-            int y
-    ) {
+        add(cardPago);
 
-        PrimaryLabel lblTitulo =
-                new PrimaryLabel(titulo + ":");
+        InfoCard cardEntrenador =
+                new InfoCard(
+                        "Entrenador asignado",
+                        "Sin asignar"
+                );
 
-        lblTitulo.setBounds(
-                40,
-                y,
-                220,
-                25
-        );
+        cardEntrenador.setBounds(330, 260, 260, 90);
 
-        add(lblTitulo);
-
-        PrimaryLabel lblValor =
-                new PrimaryLabel(valor);
-
-        lblValor.setBounds(
-                270,
-                y,
-                400,
-                25
-        );
-
-        add(lblValor);
+        add(cardEntrenador);
 
     }
 

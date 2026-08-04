@@ -1,38 +1,32 @@
 package view;
 
-import javax.swing.table.DefaultTableModel;
-
-import view.components.BasePanel;
-import view.components.PrimaryLabel;
-import view.components.PrimaryTable;
-import view.components.SectionTitle;
-
-import model.Usuario;
-
 import controller.ClienteController;
 import model.Cliente;
+import model.Usuario;
+import view.components.BasePanel;
+import view.components.InfoPanel;
+import view.components.PrimaryLabel;
+import view.components.SectionTitle;
 
 public class ClienteProgresoPanel extends BasePanel {
 
-    private PrimaryTable tablaProgreso;
-
     private Usuario usuario;
-    
+
     private ClienteController clienteController;
 
     private Cliente cliente;
 
     public ClienteProgresoPanel(Usuario usuario) {
 
-    	this.usuario = usuario;
+        this.usuario = usuario;
 
-    	clienteController = new ClienteController();
+        clienteController = new ClienteController();
 
-    	cliente = clienteController.buscarPorPersona(
-    	        usuario.getPersona().getIdPersona()
-    	);
+        cliente = clienteController.buscarPorPersona(
+                usuario.getPersona().getIdPersona()
+        );
 
-    	inicializarComponentes();
+        inicializarComponentes();
 
     }
 
@@ -43,137 +37,98 @@ public class ClienteProgresoPanel extends BasePanel {
         PrimaryLabel descripcion =
                 new PrimaryLabel("Consulta la evolución de tu entrenamiento.");
 
-        descripcion.setBounds(40, 80, 400, 25);
+        descripcion.setBounds(40,80,500,25);
 
         add(descripcion);
 
-        crearResumen();
+        crearPanelInformacion();
 
-        
+        crearPanelSeguimiento();
 
     }
 
-    private void crearResumen() {
+    private void crearPanelInformacion() {
 
-        agregarDato(
+        InfoPanel panel =
+                new InfoPanel("Información Física");
+
+        panel.setBounds(40,130,430,280);
+
+        add(panel);
+
+        agregarDato(panel,
                 "Objetivo",
                 "Sin asignar",
-                40,
-                140
-        );
+                20,
+                70);
 
-        agregarDato(
+        agregarDato(panel,
                 "Nivel",
                 "Sin asignar",
-                40,
-                180
-        );
+                20,
+                110);
 
-        agregarDato(
+        agregarDato(panel,
                 "Entrenador",
                 "Sin asignar",
-                40,
-                220
-        );
+                20,
+                150);
 
-        agregarDato(
-                "Fecha de ingreso",
+        agregarDato(panel,
+                "Fecha ingreso",
                 cliente.getFechaIngreso() != null
                         ? cliente.getFechaIngreso().toString()
-                        : "Sin completar",
-                40,
-                260
-        );
+                        : "Sin registrar",
+                20,
+                190);
 
-        agregarDato(
+        agregarDato(panel,
                 "Estado",
                 cliente.getEstado() != null
                         ? cliente.getEstado()
-                        : "Sin completar",
-                40,
-                300
-        );
-
-        agregarDato(
-                "Peso actual",
-                "Sin completar",
-                500,
-                140
-        );
-
-        agregarDato(
-                "Peso inicial",
-                "Sin completar",
-                500,
-                180
-        );
-
-        agregarDato(
-                "Cambio total",
-                "Sin completar",
-                500,
-                220
-        );
-
-        agregarDato(
-                "Asistencia",
-                "Sin completar",
-                500,
-                260
-        );
+                        : "Sin registrar",
+                20,
+                230);
 
     }
 
-    private void crearTabla() {
+    private void crearPanelSeguimiento() {
 
-        PrimaryLabel tituloTabla =
-                new PrimaryLabel("Historial de Progreso");
+        InfoPanel panel =
+                new InfoPanel("Seguimiento");
 
-        tituloTabla.setBounds(40, 320, 250, 25);
+        panel.setBounds(500,130,430,280);
 
-        add(tituloTabla);
+        add(panel);
 
-        tablaProgreso = new PrimaryTable();
+        agregarDato(panel,
+                "Peso inicial",
+                "Pendiente de implementar",
+                20,
+                70);
 
-        DefaultTableModel modelo =
-                new DefaultTableModel();
+        agregarDato(panel,
+                "Peso actual",
+                "Pendiente de implementar",
+                20,
+                110);
 
-        modelo.addColumn("Fecha");
-        modelo.addColumn("Peso");
-        modelo.addColumn("Observación");
+        agregarDato(panel,
+                "Cambio total",
+                "Pendiente de implementar",
+                20,
+                150);
 
-        modelo.addRow(new Object[] {
-                "28/06/2026",
-                "76 kg",
-                "Inicio"
-        });
-
-        modelo.addRow(new Object[] {
-                "05/07/2026",
-                "77 kg",
-                "+1 kg"
-        });
-
-        modelo.addRow(new Object[] {
-                "12/07/2026",
-                "78 kg",
-                "Excelente progreso"
-        });
-
-        tablaProgreso.getTable().setModel(modelo);
-
-        tablaProgreso.setBounds(
-                40,
-                360,
-                900,
-                260
-        );
-
-        add(tablaProgreso);
+        agregarDato(panel,
+                "Asistencia",
+                "Pendiente de implementar",
+                20,
+                190);
 
     }
 
     private void agregarDato(
+            InfoPanel panel,
             String titulo,
             String valor,
             int x,
@@ -186,23 +141,23 @@ public class ClienteProgresoPanel extends BasePanel {
         lblTitulo.setBounds(
                 x,
                 y,
-                170,
+                150,
                 25
         );
 
-        add(lblTitulo);
+        panel.add(lblTitulo);
 
         PrimaryLabel lblValor =
                 new PrimaryLabel(valor);
 
         lblValor.setBounds(
-                x + 180,
+                x + 160,
                 y,
-                250,
+                220,
                 25
         );
 
-        add(lblValor);
+        panel.add(lblValor);
 
     }
 

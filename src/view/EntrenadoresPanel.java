@@ -176,7 +176,7 @@ public class EntrenadoresPanel extends BasePanel {
 
         Entrenador entrenador = modelo.getEntrenador(filaModelo);
 
-        EntrenadorDialog dialog = new EntrenadorDialog();
+        EntrenadorDialog dialog = new EntrenadorDialog(entrenador);
 
         dialog.setVisible(true);
 
